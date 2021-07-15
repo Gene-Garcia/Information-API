@@ -18,10 +18,43 @@ router.get('/', (req, res) => {
 });
 
 // Get information with :title
-// router.get('/:title');
+router.get('/title/:title', (req, res) => {
+    const title = req.params.title;
+
+    if (h.isEmpty(title)) res.json({status: 300, message: 'Empty url parameter'});
+    else {
+
+        // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
+        Information.findOne({title: { $regex : new RegExp(title, "i") }}, (err, doc) => {
+            if (err) res.json({status: 300, message: "Invalid search request.", err: err});
+            else {
+                console.log(doc);
+                res.json({status: 200, message:'Information found', document: doc});
+            }
+        });
+
+    }
+
+});
 
 // Get information that has the :keyword
-// router.get('/:keyword');
+router.get('/keyword/:keyword', (req, res) => {
+    const keyword = req.params.keyword;
+
+    if (h.isEmpty(keyword)) res.json({status: 300, message: 'Empty url parameter'});
+    else {
+
+        // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
+        Information.find({keywords: { $regex : new RegExp(keyword, "i") }}, (err, doc) => {
+            if (err) res.json({status: 300, message: "Invalid search request.", err: err});
+            else {
+                console.log(doc);
+                res.json({status: 200, message:'Information found', document: doc});
+            }
+        });
+
+    }
+});
 
 // Post new information
 router.post('/', (req, res) => {
@@ -45,7 +78,7 @@ router.post('/', (req, res) => {
         });
         info.save((err) => {
             
-            if (err) res.json({status: 300, message: "Incomplete post data.", err: err});
+            if (err) res.json({status: 300, message: "Invalid request.", err: err});
             else res.json({status: 200, message: "Successful information creation to our server.", document: info});
         });
 
