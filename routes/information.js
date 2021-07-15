@@ -28,14 +28,51 @@ router.get('/title/:title', (req, res) => {
         Information.findOne({title: { $regex : new RegExp(title, "i") }}, (err, doc) => {
             if (err) res.json({status: 300, message: "Invalid search request.", err: err});
             else {
-                console.log(doc);
                 res.json({status: 200, message:'Information found', document: doc});
             }
         });
 
     }
-
 });
+
+// Update information with :title
+router.put('/title/:title', (req, res) => {
+    const titleParam = req.params.title;
+
+    const title = req.body.title;
+    const description = req.body.description;
+    const rawKeywords = req.body.keywords;
+
+    if (h.isEmpty(titleParam)) res.json({status: 300, message: 'Empty url parameter'});
+    else if (h.isEmpty(title) || h.isEmpty(description) || h.isEmpty(rawKeywords)){
+        res.json({status: 300, message: "Incomplete post data."});
+    } else {
+
+        // parse rawKeywords into an array
+        const keywords = rawKeywords.split(',');
+
+        Information.update({title: { $regex : new RegExp(titleParam, "i") }}, {
+            title: title,
+            description: description,
+            keywords: keywords,
+            date: Date.now()
+        }, {overwrite: true},
+        (err, result) => {
+            console.log(err);
+            console.log(result);
+            if (err) {
+                res.json({status: 300, message: "Invalid request.", err: err})
+            } else {
+                if (result.n <= 0) res.json({status: 200, message: 'No information was updated', count: result.n});
+                else res.json({status: 200, message: 'Information was updated', count: result.n});
+
+            }
+
+        });
+
+    }
+});
+// router.patch('/:title');
 
 // Get information that has the :keyword
 router.get('/keyword/:keyword', (req, res) => {
@@ -86,9 +123,6 @@ router.post('/', (req, res) => {
 
 });
 
-// Update information with :title
-// router.put('/:title');
-// router.patch('/:title');
 
 // would we implement deletes?
 router.delete('/', (req, res) => {
