@@ -58,8 +58,6 @@ router.put('/title/:title', (req, res) => {
             date: Date.now()
         }, {overwrite: true},
         (err, result) => {
-            console.log(err);
-            console.log(result);
             if (err) {
                 res.json({status: 300, message: "Invalid request.", err: err})
             } else {
@@ -72,7 +70,30 @@ router.put('/title/:title', (req, res) => {
 
     }
 });
-// router.patch('/:title');
+router.patch('/title/:title', (req, res) => {
+    const titleParam = req.params.title;
+
+    if (h.isEmpty(titleParam)) res.json({status: 300, message: 'Empty url parameter'});
+    else {
+
+        // manually check if keywords is gonna be changed
+        // if it is there, then we replace the value with an array from splitting the old value
+        if ('keywords' in req.body) {
+            req.body.keywords = req.body.keywords.split(',');
+        }
+
+        Information.updateMany({title: { $regex : new RegExp(titleParam, "i") }}, { $set: req.body}, 
+            (err, result) => {
+                if (err) {
+                    res.json({status: 300, message: "Invalid request.", err: err})
+                } else {
+                    if (result.n <= 0) res.json({status: 200, message: 'No information was updated', count: result.n});
+                    else res.json({status: 200, message: 'Information was updated', count: result.n});
+                }
+
+            });
+    }
+});
 
 // Get information that has the :keyword
 router.get('/keyword/:keyword', (req, res) => {
