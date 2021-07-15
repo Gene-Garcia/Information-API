@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const informationScheme = new Schema({
+const informationSchema = new Schema({
     title: {
         type: String,
         required: 'Where is the title of the information?'
@@ -12,7 +12,7 @@ const informationScheme = new Schema({
         required: 'What is the date today?'
     },
     description: {
-        type: String,
+        type: String,   
         required: 'What is the meaning of this information?'
     },
     keywords: [{
@@ -27,4 +27,4 @@ const informationScheme = new Schema({
 // within the mongoose of the application
 // Instantiating the mongoose connection is global to the application.
 // Only one instance through the whole runtime
-mongoose.model('Information', informationScheme);
+mongoose.model('Information', informationSchema);
