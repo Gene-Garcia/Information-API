@@ -95,6 +95,35 @@ router.patch('/title/:title', (req, res) => {
     }
 });
 
+// would we implement deletes?
+router.delete('/title/:title', (req, res) => {
+    const title = req.params.title;
+
+    if (h.isEmpty(title)) res.json({status: 300, message: 'Empty url parameter'});
+    else {
+        Information.deleteOne({title: { $regex : new RegExp(title, "i") }}, (err, result) =>{
+            console.log(err);
+            console.log(result);
+
+            if (result.n <= 0) res.json({status: 200, message: 'No information was deleted', count: result.n});
+            else res.json({status: 200, message: 'The information was deleted', count: result.n});
+            
+        });
+    }
+});
+
+router.delete('/', (req, res) => {
+    Information.deleteMany((err, result) => {
+
+        if (err) res.json({status: 300, err: err});
+        else {
+            if (result.n <= 0) res.json({status: 200, message: 'No information was deleted', count: result.n});
+            else res.json({status: 200, message: 'All information was deleted', count: result.n});
+        }
+        
+    });
+});
+
 // Get information that has the :keyword
 router.get('/keyword/:keyword', (req, res) => {
     const keyword = req.params.keyword;
@@ -145,17 +174,5 @@ router.post('/', (req, res) => {
 });
 
 
-// would we implement deletes?
-router.delete('/', (req, res) => {
-    Information.deleteMany((err, data) => {
-
-        if (err) res.json({status: 300, err: err});
-        else {
-            if (data.n <= 0) res.json({status: 200, message: 'No information was deleted', count: data.n});
-            else res.json({status: 200, message: 'All information was deleted', count: data.n});
-        }
-        
-    });
-});
 
 module.exports = router;
