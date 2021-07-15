@@ -10,7 +10,7 @@ const Information = mongoose.model('Information');
 // Get all information
 router.get('/', (req, res) => {
     Information.find({}, (err, docs) => {
-        if (err) res.send('Error');
+        if (err) res.send(err);
         else res.send(docs);
     })
 });
