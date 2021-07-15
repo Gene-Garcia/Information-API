@@ -1,0 +1,15 @@
+{
+  "name": "open-information",
+  "version": "1.0.0",
+  "description": "An API for sharing knowledge and information",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gene Joseph Garcia",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.13.2"
+  }
+}
