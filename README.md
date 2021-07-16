@@ -11,19 +11,59 @@ An api to store, retrive, update, and delete any information
 | [STRING]   | keywords      | true     |
 
 ## Usage
-** Endpoint: **
+**Endpoint:**
  - http://openinfo-api.herokuapp.com/
 
 ### GET
-lorem
+**All**
+ - http://openinfo-api.herokuapp.com/information
+
+**Title**:
+ - http://openinfo-api.herokuapp.com/title/some-title
+
+**Keyword**:
+ - http://openinfo-api.herokuapp.com/keyword/some-keyword
 
 ### POST
-lorem
+**Endpoint:**
+ - http://openinfo-api.herokuapp.com/information
+
+```
+data = {
+   title: 'some-title',
+   description: 'some-description',
+   keywords: 'some-keywords(s) in whole string seperated by ','
+}
+```
 
 ### PUT
-lorem
+**Title**:
+ - http://openinfo-api.herokuapp.com/title/some-title
+
+```
+data = {
+   title: 'some-new-title',
+   description: 'some-new-description',
+   keywords: 'some-keywords(s) in whole string seperated by ','
+}
+```
+*Every key/field is required*
 
 ### PATCH
-lorem
+**Title**:
+ - http://openinfo-api.herokuapp.com/title/some-title
+
+```
+data = {
+   description: 'some-new-description',
+}
+```
+
+*Can be any combination of field to be updated*
 
 ### DELETE
+**All**
+ - http://openinfo-api.herokuapp.com/information
+
+**Title**:
+ - http://openinfo-api.herokuapp.com/title/some-title
