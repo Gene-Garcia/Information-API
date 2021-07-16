@@ -11,8 +11,8 @@ An api to store, retrive, update, and delete any information
 | [STRING]   | keywords      | true     |
 
 ## Usage
-Endpoint: 
-http://openinfo-api.herokuapp.com/
+** Endpoint: **
+ - http://openinfo-api.herokuapp.com/
 
 ### GET
 lorem
