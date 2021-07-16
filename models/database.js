@@ -10,8 +10,10 @@ const mongoose = require('mongoose');
    connecting to the database
  */
 
-const DB_NAME = 'openInfoAPIDB'
-mongoose.connect(`mongodb://localhost:27017/${DB_NAME}`, {
+const DB_NAME = 'openInfoAPIDB';
+const DB_USERNAME = process.env.DB_USERNAME;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+mongoose.connect(`mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@ejournalmoko.sofzm.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`, {
     useNewUrlParser: true, 
     useUnifiedTopology: true
 });
