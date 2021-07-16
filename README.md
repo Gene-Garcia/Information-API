@@ -2,7 +2,12 @@
 An api to store, retrive, update, and delete any information
 
 ## Data Structure
-lorem
+|# DATA TYPE | FIELD NAME    |
+|------------|:-------------:|
+| STRING     | title         |
+| STRING     | desription    |
+| DATE       | date          |
+| [STRING]   | keywords      |
 
 ## Usage
 lorem
