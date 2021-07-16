@@ -2,15 +2,16 @@
 An api to store, retrive, update, and delete any information
 
 ## Data Structure
-|# DATA TYPE | FIELD NAME    |
-|------------|---------------|
-| STRING     | title         |
-| STRING     | desription    |
-| DATE       | date          |
-| [STRING]   | keywords      |
+| DATA TYPE  | FIELD NAME    | REQUIRED |
+|------------|---------------|----------|
+| OBJECT     | __id          | system   |
+| STRING     | title         | true     |
+| STRING     | desription    | true     |
+| DATE       | date          | system   |
+| [STRING]   | keywords      | true     |
 
 ## Usage
-lorem
+Endpoint: http://openinfo-api.herokuapp.com/
 
 ### GET
 lorem
