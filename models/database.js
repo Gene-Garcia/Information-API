@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 // Database
@@ -13,6 +14,7 @@ const mongoose = require('mongoose');
 const DB_NAME = 'openInfoAPIDB';
 const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = process.env.DB_PASSWORD;
+
 mongoose.connect(`mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@personal-cluster.sofzm.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`, {
     useNewUrlParser: true, 
     useUnifiedTopology: true
