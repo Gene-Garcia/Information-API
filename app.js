@@ -1,19 +1,16 @@
 const express = require('express');
+const Cors = require('cors');
 
 // Local modules
 require('./models/database')
-// const mongoose = require('mongoose');
-// const Information = mongoose.model('Information');
 
 const app = express();
 
-app.use(express.urlencoded({extended:true}));
+// middlewares
+app.use(express.json());
+app.use(Cors())
 
 // Route handler
-app.get('/', (req, res) => {
-  res.redirect('/information/');
-})
-
 app.use('/information', require('./routes/information'));
 
 const port = process.env.PORT || 5000;
