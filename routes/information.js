@@ -21,10 +21,10 @@ router.get("/", (req, res) => {
 router.get("/title/:title", (req, res) => {
   const title = req.params.title;
 
-  if (h.isEmpty(title)) res.send(500).send("Empty url parameter");
+  if (h.isEmpty(title)) res.status(500).send("Empty url parameter");
   else {
     // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
-    Information.findOne(
+    Information.find(
       { title: { $regex: new RegExp(title, "i") } },
       (err, doc) => {
         if (err) res.status(500).send(err);
@@ -32,6 +32,61 @@ router.get("/title/:title", (req, res) => {
           if (doc === undefined || doc === null)
             res.status(404).send("No data found with title: " + title);
           else res.status(201).send(doc);
+        }
+      }
+    );
+  }
+});
+// Get information that has the :keyword
+router.get("/keyword/:keyword", (req, res) => {
+  const keyword = req.params.keyword;
+
+  if (h.isEmpty(keyword)) res.status(300).send("Empty url parameter");
+  else {
+    // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
+    Information.find(
+      { keywords: { $regex: new RegExp(keyword, "i") } },
+      (err, doc) => {
+        if (err) res.status(500).send(err);
+        else {
+          if (doc === undefined || doc === null || doc.length <= 0)
+            res.status(404).send("No data found with keyword: " + keyword);
+          else res.status(201).send(doc);
+        }
+      }
+    );
+  }
+});
+// Get information with :title and that has the :keyword
+router.get("/title/:title/keyword/:keyword", (req, res) => {
+  const title = req.params.title;
+  const keyword = req.params.keyword;
+
+  if (h.isEmpty(title) || h.isEmpty(keyword))
+    res.status(500).send("Empty url parameter");
+  else {
+    Information.find(
+      {
+        title: { $regex: new RegExp(title, "i") },
+        keywords: { $regex: new RegExp(keyword, "i") },
+      },
+      (err, docs) => {
+        if (err) res.status(500).send(err);
+        else {
+          if (docs === null || docs === undefined)
+            res.status(500).send("Something went wrong");
+          else {
+            if (docs.length <= 0)
+              res
+                .status(404)
+                .send(
+                  "Not data found with title: " +
+                    title +
+                    " and keyword: " +
+                    keyword
+                );
+            else res.status(201).send(docs);
+          }
         }
       }
     );
@@ -119,27 +174,6 @@ router.delete("/", (req, res) => {
       else res.status(204).send();
     }
   });
-});
-
-// Get information that has the :keyword
-router.get("/keyword/:keyword", (req, res) => {
-  const keyword = req.params.keyword;
-
-  if (h.isEmpty(keyword)) res.status(300).send("Empty url parameter");
-  else {
-    // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
-    Information.find(
-      { keywords: { $regex: new RegExp(keyword, "i") } },
-      (err, doc) => {
-        if (err) res.status(500).send(err);
-        else {
-          if (doc === undefined || doc === null || doc.length <= 0)
-            res.status(404).send("No data found with keyword: " + keyword);
-          else res.status(201).send(doc);
-        }
-      }
-    );
-  }
 });
 
 // Post new information
