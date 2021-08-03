@@ -13,7 +13,11 @@ const Information = mongoose.model("Information");
 router.get("/", (req, res) => {
   Information.find({}, (err, docs) => {
     if (err) res.status(500).send(err);
-    else res.status(201).send(docs);
+    else {
+      if (docs.length <= 0)
+        res.status(404).send("No open information data found");
+      else res.status(201).send(docs);
+    }
   });
 });
 
@@ -25,13 +29,13 @@ router.get("/title/:title", (req, res) => {
   else {
     // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
     Information.find(
-      { title: { $regex: new RegExp(title, "i") } },
-      (err, doc) => {
+      { title: { $regex: title, $options: "i" } },
+      (err, docs) => {
         if (err) res.status(500).send(err);
         else {
-          if (doc === undefined || doc === null)
+          if (docs.length <= 0)
             res.status(404).send("No data found with title: " + title);
-          else res.status(201).send(doc);
+          else res.status(201).send(docs);
         }
       }
     );
@@ -45,13 +49,13 @@ router.get("/keyword/:keyword", (req, res) => {
   else {
     // the regex 'i' indicates to ignore the case, and then we used $regex to have mongoose understand the regex expression
     Information.find(
-      { keywords: { $regex: new RegExp(keyword, "i") } },
-      (err, doc) => {
+      { keywords: { $regex: keyword, $options: "i" } },
+      (err, docs) => {
         if (err) res.status(500).send(err);
         else {
-          if (doc === undefined || doc === null || doc.length <= 0)
+          if (docs === undefined || docs === null || docs.length <= 0)
             res.status(404).send("No data found with keyword: " + keyword);
-          else res.status(201).send(doc);
+          else res.status(201).send(docs);
         }
       }
     );
@@ -67,14 +71,21 @@ router.get("/title/:title/keyword/:keyword", (req, res) => {
   else {
     Information.find(
       {
-        title: { $regex: new RegExp(title, "i") },
-        keywords: { $regex: new RegExp(keyword, "i") },
+        title: { $regex: title, $options: "i" },
+        keywords: { $regex: keyword, $options: "i" },
       },
       (err, docs) => {
         if (err) res.status(500).send(err);
         else {
           if (docs === null || docs === undefined)
-            res.status(500).send("Something went wrong");
+            res
+              .status(404)
+              .send(
+                "Not data found with title: " +
+                  title +
+                  " and keyword: " +
+                  keyword
+              );
           else {
             if (docs.length <= 0)
               res
