@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 const h = require("../utils/helper");
@@ -150,29 +151,48 @@ router.get("/title/:title/keyword/:keyword", (req, res) => {
 //     );
 //   }
 // });
-router.patch("/title/:title", (req, res) => {
+router.patch("/:id/title/:title", (req, res) => {
+  const id = req.params.id;
   const titleParam = req.params.title;
 
-  if (h.isEmpty(titleParam)) res.status(300).send("Empty url parameter");
+  if (h.isEmpty(titleParam) || h.isEmpty(id))
+    res.status(500).send("Empty url parameter");
   else {
-    // manually check if keywords is gonna be changed
-    // if it is there, then we replace the value with an array from splitting the old value
-    if ("keywords" in req.body) {
-      req.body.keywords = req.body.keywords.split(",");
+    const data = req.body;
+
+    let result = true;
+
+    // please improve this
+    // check if key exists
+    if (!("title" in data)) result = false;
+    if (!("description" in data)) result = false;
+    if (!("keywords" in data)) result = false;
+    // check if this key has value
+    if (!result) {
+      if (
+        h.isEmpty(data.title) ||
+        h.isEmpty(data.keywords) ||
+        h.isEmpty(data.description)
+      )
+        result = false;
     }
 
-    Information.updateMany(
-      { title: { $regex: new RegExp(titleParam, "i") } },
-      { $set: req.body },
-      (err, result) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          if (result.n <= 0) res.status(404).send("No information was updated");
-          else res.status(201).send("Information was updated");
+    if (!result) res.status(404).send("Incomplete data body.");
+    else {
+      Information.updateMany(
+        { _id: id, title: { $regex: new RegExp(titleParam, "i") } },
+        { $set: req.body },
+        (err, result) => {
+          if (err) {
+            res.status(500).send(err);
+          } else {
+            if (result.n <= 0)
+              res.status(404).send("No information was updated");
+            else res.status(201).send("Information was updated");
+          }
         }
-      }
-    );
+      );
+    }
   }
 });
 
