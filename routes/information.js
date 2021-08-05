@@ -20,7 +20,22 @@ router.get("/", (req, res) => {
     }
   });
 });
+// Get information with :id
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
 
+  if (h.isEmpty(id)) res.status(500).send("Empty url parameter");
+  else {
+    Information.findOne({ _id: id }, (err, doc) => {
+      if (err) res.status(500).send(err);
+      else {
+        if (doc === null || doc === undefined)
+          res.status(404).send("No data was found");
+        else res.status(201).send(doc);
+      }
+    });
+  }
+});
 // Get information with :title
 router.get("/title/:title", (req, res) => {
   const title = req.params.title;
