@@ -10,6 +10,11 @@ const Information = mongoose.model("Information");
 
 // router handler for '/information/'
 
+// router.get("/t", (req, res) => {
+//   console.log(h.splitKeywords("asdas,, , asdadas , , adasdas asd, m"));
+//   res.send("test");
+// });
+
 // Get all information
 router.get("/", (req, res) => {
   Information.find({}, (err, docs) => {
@@ -177,7 +182,7 @@ router.patch("/:id/title/:title", (req, res) => {
         result = false;
     }
 
-    data.keywords = data.keywords.split(",");
+    data.keywords = h.splitKeywords(data.keywords);
 
     if (!result) res.status(404).send("Incomplete data body.");
     else {
@@ -235,7 +240,7 @@ router.post("/", (req, res) => {
   } else {
     // parse rawKeywoards into an array
     // DELIMETER is ','
-    const keywords = rawKeywords.split(",");
+    const keywords = h.splitKeywords(rawKeywords);
 
     const info = new Information({
       title: title,

@@ -4,3 +4,15 @@ exports.isEmpty = (data) => {
   else if (data === "") return true;
   return false;
 };
+
+exports.splitKeywords = (keywords) => {
+  const keywordsArr = keywords.split(",");
+  const clean = [];
+
+  keywordsArr.forEach((k) => {
+    let temp = k.trim();
+    if (temp !== "") clean.push(temp);
+  });
+
+  return clean;
+};
