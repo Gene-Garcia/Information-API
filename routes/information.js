@@ -177,6 +177,8 @@ router.patch("/:id/title/:title", (req, res) => {
         result = false;
     }
 
+    data.keywords = data.keywords.split(",");
+
     if (!result) res.status(404).send("Incomplete data body.");
     else {
       Information.updateMany(
