@@ -119,37 +119,37 @@ router.get("/title/:title/keyword/:keyword", (req, res) => {
   }
 });
 
-// Update information with :title
-router.put("/title/:title", (req, res) => {
-  const titleParam = req.params.title;
+// // Update information with :title
+// router.put("/title/:title", (req, res) => {
+//   const titleParam = req.params.title;
 
-  if (h.isEmpty(titleParam)) res.send(404).send("Empty url parameter");
-  // COMMENTED THIS BECAUSE IT DEFEATS THE PURPOSE OF PUT, WHICH IS TO REPLACE THE COLLECTION WITH NEW SCHEMA OF DATA
-  // else if (h.isEmpty(title) || h.isEmpty(description) || h.isEmpty(rawKeywords)){
-  //     res.status(404).send('Incomplete data. Title, description and keywords are required.s');
-  // }
-  else {
-    // parse rawKeywords into an array
-    if ("keywords" in req.body) {
-      req.body.keywords = req.body.keywords.split(",");
-    }
+//   if (h.isEmpty(titleParam)) res.send(404).send("Empty url parameter");
+//   // COMMENTED THIS BECAUSE IT DEFEATS THE PURPOSE OF PUT, WHICH IS TO REPLACE THE COLLECTION WITH NEW SCHEMA OF DATA
+//   // else if (h.isEmpty(title) || h.isEmpty(description) || h.isEmpty(rawKeywords)){
+//   //     res.status(404).send('Incomplete data. Title, description and keywords are required.s');
+//   // }
+//   else {
+//     // parse rawKeywords into an array
+//     if ("keywords" in req.body) {
+//       req.body.keywords = req.body.keywords.split(",");
+//     }
 
-    Information.replaceOne(
-      { title: { $regex: new RegExp(titleParam, "i") } },
-      req.body,
-      { overwrite: true },
-      (err, result) => {
-        console.log(err);
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          if (result.n <= 0) res.status(404).send("No information was updated");
-          else res.status(201).send("Information succesfully updated");
-        }
-      }
-    );
-  }
-});
+//     Information.replaceOne(
+//       { title: { $regex: new RegExp(titleParam, "i") } },
+//       req.body,
+//       { overwrite: true },
+//       (err, result) => {
+//         console.log(err);
+//         if (err) {
+//           res.status(500).send(err);
+//         } else {
+//           if (result.n <= 0) res.status(404).send("No information was updated");
+//           else res.status(201).send("Information succesfully updated");
+//         }
+//       }
+//     );
+//   }
+// });
 router.patch("/title/:title", (req, res) => {
   const titleParam = req.params.title;
 
@@ -176,31 +176,31 @@ router.patch("/title/:title", (req, res) => {
   }
 });
 
-// would we implement deletes?
-router.delete("/title/:title", (req, res) => {
-  const title = req.params.title;
+// // would we implement deletes?
+// router.delete("/title/:title", (req, res) => {
+//   const title = req.params.title;
 
-  if (h.isEmpty(title)) res.status(404).send("Empty url parameter");
-  else {
-    Information.deleteOne(
-      { title: { $regex: new RegExp(title, "i") } },
-      (err, result) => {
-        if (result.n <= 0) res.status(404).send("No information was deleted");
-        else res.status(204).send();
-      }
-    );
-  }
-});
+//   if (h.isEmpty(title)) res.status(404).send("Empty url parameter");
+//   else {
+//     Information.deleteOne(
+//       { title: { $regex: new RegExp(title, "i") } },
+//       (err, result) => {
+//         if (result.n <= 0) res.status(404).send("No information was deleted");
+//         else res.status(204).send();
+//       }
+//     );
+//   }
+// });
 
-router.delete("/", (req, res) => {
-  Information.deleteMany((err, result) => {
-    if (err) res.status(500).send(err);
-    else {
-      if (result.n <= 0) res.status(404).send("No information was deleted");
-      else res.status(204).send();
-    }
-  });
-});
+// router.delete("/", (req, res) => {
+//   Information.deleteMany((err, result) => {
+//     if (err) res.status(500).send(err);
+//     else {
+//       if (result.n <= 0) res.status(404).send("No information was deleted");
+//       else res.status(204).send();
+//     }
+//   });
+// });
 
 // Post new information
 router.post("/", (req, res) => {
